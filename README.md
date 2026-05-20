@@ -2,13 +2,6 @@
 
 > A minimalist, interactive, and modern personal portfolio website with a **Retro-Cyber / Dark Mode** aesthetic.
 
----
-
-## ✨ Preview
-
-![Portfolio Preview](profile.jpg)
-
----
 
 ## 🚀 Tech Stack
 
