@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idham Kholid Abidin — Portfolio</title>
+  <meta name="description" content="Personal portfolio of Idham Kholid Abidin — Informatics Engineering student at Universitas Trunojoyo Madura. Crafting minimalist interfaces with functional retro aesthetics." />
+  <meta name="author" content="Idham Kholid Abidin" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==============================
+       NAVBAR
+       ============================== -->
+  <nav class="navbar" id="navbar">
+    <a href="#hero" class="navbar-logo">dhamm<span style="color:#fff">-dev</span></a>
+    <ul class="navbar-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#cities">Explore</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==============================
+       HERO SECTION
+       ============================== -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-content">
+
+        <div class="hero-status fade-in">
+          <span class="status-dot"></span>
+          <span>Available for new projects</span>
+        </div>
+
+        <p class="hero-greeting mono fade-in">// Hello, World! I'm</p>
+
+        <h1 class="hero-name fade-in">Idham Kholid<br>Abidin</h1>
+
+        <p class="hero-role fade-in">
+          &gt; <span id="typed-text"></span><span class="cursor"></span>
+        </p>
+
+        <p class="hero-desc text-muted fade-in">
+          Crafting minimalist interfaces with functional retro aesthetics.
+          Exploring logic, data structures, and the beauty of the web.
+        </p>
+
+        <div class="hero-cta fade-in">
+          <a href="#cities" class="btn btn-primary">Explore My World →</a>
+          <a href="#contact" class="btn btn-outline">Get In Touch</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       ABOUT SECTION
+       ============================== -->
+  <section id="about">
+    <div class="container">
+
+      <p class="section-title">// about.me</p>
+      <h2 class="section-heading">About Me</h2>
+
+      <div class="about-grid">
+
+        <!-- Left: Text -->
+        <div class="about-text">
+          <p>
+            Hey! I'm <strong>Idham Kholid Abidin</strong> — a curious mind currently in my
+            <strong>2nd semester of Informatics Engineering (Teknik Informatika)</strong>
+            at <strong>Universitas Trunojoyo Madura</strong>.
+          </p>
+          <p>
+            My world revolves around exploring the logic behind systems, understanding
+            data structures, and translating abstract ideas into clean, functional interfaces.
+            I believe great code should be both elegant and purposeful.
+          </p>
+          <p>
+            When I'm not studying, you'll find me experimenting with web technologies,
+            reading about algorithms, or crafting side projects that scratch my creative itch.
+          </p>
+
+          <div class="about-tags">
+            <span class="tag">Logic &amp; Algorithms</span>
+            <span class="tag">Data Structures</span>
+            <span class="tag">Web Development</span>
+            <span class="tag">UI Design</span>
+            <span class="tag">Open Source</span>
+          </div>
+        </div>
+
+        <!-- Right: Photo -->
+        <div class="photo-frame">
+          <img
+            src="profile.jpg"
+            alt="Idham Kholid Abidin — Profile Photo"
+            id="profile-img"
+            onerror="this.style.display='none'; document.getElementById('photo-fallback').style.display='flex';"
+          />
+          <!-- Fallback if photo missing -->
+          <div
+            id="photo-fallback"
+            style="
+              display:none;
+              width:100%; aspect-ratio:1;
+              background: linear-gradient(135deg, #161616 0%, #1f0a35 100%);
+              border: 2px solid #8B5CF6;
+              border-radius: 8px;
+              align-items: center;
+              justify-content: center;
+              flex-direction: column;
+              gap: 0.5rem;
+            "
+          >
+            <span style="font-size:4rem">👤</span>
+            <span style="font-family:var(--font-mono);color:var(--accent-purple);font-size:1.2rem">IKA</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       3 CITIES SECTION
+       ============================== -->
+  <section id="cities">
+    <div class="container">
+
+      <p class="section-title">// navigate.world</p>
+      <h2 class="section-heading">Choose Your Destination</h2>
+
+      <!-- City Cards -->
+      <div class="cities-grid">
+
+        <div class="city-card" data-city="projects" id="card-projects">
+          <span class="city-icon">🏙️</span>
+          <div class="city-name mono">City 01</div>
+          <div class="city-title">Project Downtown</div>
+          <div class="city-desc">Browse my built projects and experiments.</div>
+        </div>
+
+        <div class="city-card" data-city="education" id="card-education">
+          <span class="city-icon">🎓</span>
+          <div class="city-name mono">City 02</div>
+          <div class="city-title">Academy Metropolis</div>
+          <div class="city-desc">My academic journey and education timeline.</div>
+        </div>
+
+        <div class="city-card" data-city="techstack" id="card-techstack">
+          <span class="city-icon">⚙️</span>
+          <div class="city-name mono">City 03</div>
+          <div class="city-title">Tech Forge Labs</div>
+          <div class="city-desc">My current tech stack and tools.</div>
+        </div>
+
+      </div>
+
+      <!-- ── City Panels (populated by script.js) ── -->
+
+      <div class="city-panel" id="panel-projects">
+        <p class="section-title">// project_downtown</p>
+        <h3 style="margin-bottom:0.4rem">My Projects</h3>
+        <p class="text-muted" style="font-size:0.875rem;margin-bottom:0.5rem">
+          A collection of things I've built while learning and exploring.
+        </p>
+        <div id="projects-container"></div>
+      </div>
+
+      <div class="city-panel" id="panel-education">
+        <p class="section-title">// academy_metropolis</p>
+        <h3 style="margin-bottom:0.4rem">Education Timeline</h3>
+        <p class="text-muted" style="font-size:0.875rem;margin-bottom:0.5rem">
+          Where I've studied and what shaped my thinking.
+        </p>
+        <div id="education-container"></div>
+      </div>
+
+      <div class="city-panel" id="panel-techstack">
+        <p class="section-title">// tech_forge_labs</p>
+        <h3 style="margin-bottom:0.4rem">Tech Stack</h3>
+        <p class="text-muted" style="font-size:0.875rem;margin-bottom:0.5rem">
+          Tools and technologies I work with. Hover to feel the power.
+        </p>
+        <div id="techstack-container"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       CONTACT SECTION
+       ============================== -->
+  <section id="contact">
+    <div class="container">
+
+      <p class="section-title">// contact.me</p>
+      <h2 class="section-heading">Get In Touch</h2>
+
+      <div class="contact-grid">
+
+        <!-- Social Hub -->
+        <div>
+          <p class="social-title">Find me on</p>
+          <div class="social-links">
+
+            <a
+              href="https://github.com/dhamm-dev"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="link-github"
+            >
+              <span class="social-link-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </span>
+              <div class="social-link-info">
+                <span class="social-link-name">GitHub</span>
+                <span class="social-link-handle text-muted">github.com/dhamm-dev</span>
+              </div>
+            </a>
+
+            <a
+              href="https://www.instagram.com/dhamkholab"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="link-instagram"
+            >
+              <span class="social-link-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </span>
+              <div class="social-link-info">
+                <span class="social-link-name">Instagram</span>
+                <span class="social-link-handle text-muted">@dhamkholab</span>
+              </div>
+            </a>
+
+            <a
+              href="https://www.tiktok.com/@xeeerz"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="link-tiktok"
+            >
+              <span class="social-link-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+                </svg>
+              </span>
+              <div class="social-link-info">
+                <span class="social-link-name">TikTok</span>
+                <span class="social-link-handle text-muted">@xeeerz</span>
+              </div>
+            </a>
+
+            <a
+              href="https://discord.com/users/xieroooo"
+              class="social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="link-discord"
+            >
+              <span class="social-link-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z"/>
+                </svg>
+              </span>
+              <div class="social-link-info">
+                <span class="social-link-name">Discord</span>
+                <span class="social-link-handle text-muted">xieroooo</span>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Guestbook -->
+        <div class="guestbook">
+          <p class="social-title">Leave a Message</p>
+
+          <form class="guestbook-form" id="guestbook-form" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="gb-name">Your Name</label>
+              <input
+                class="form-input"
+                type="text"
+                id="gb-name"
+                name="name"
+                placeholder="e.g. John Doe"
+                maxlength="50"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="gb-message">Message</label>
+              <textarea
+                class="form-textarea"
+                id="gb-message"
+                name="message"
+                placeholder="Say something nice... 👋"
+                maxlength="300"
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="gb-submit"
+              style="align-self:flex-start"
+            >
+              Send Message →
+            </button>
+          </form>
+
+          <p class="social-title" style="margin-bottom:0.75rem">Guest Messages</p>
+          <div id="messages-list"></div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       FOOTER
+       ============================== -->
+  <footer>
+    <p>
+      <span>©</span> <span>2026</span> Idham Kholid Abidin
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
