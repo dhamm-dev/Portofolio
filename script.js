@@ -23,6 +23,12 @@ const PROJECTS = [
     tags:  ['HTML', 'CSS', 'JavaScript', 'Node.js'],
     link:  'https://github.com/rofal-gg/E-learning',
   },
+  {
+    title: 'DexVoucher',
+    desc:  'A voucher management and redemption system — streamlining the creation, distribution, and tracking of digital vouchers.',
+    tags:  ['JavaScript', 'Web App'],
+    link:  'https://github.com/dhamm-dev/dexvoucher',
+  },
   // Add more projects here ↓
   // { title: '', desc: '', tags: [], link: '' },
 ];
