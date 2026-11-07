@@ -122,3 +122,5 @@ body{background-image:linear-gradient(90deg,transparent 49.8%,#4037400a 50%,#fff
 .welcome-slider::-webkit-slider-thumb{background:#713d48}
 .welcome-slider::-moz-range-thumb{background:#713d48}
 @media(max-width:600px){.about-label{padding-bottom:24px}}
+.link-arrow{vertical-align:-2px}
+body{overflow-x:clip}
