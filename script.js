@@ -1,319 +1,367 @@
-/* ================================================
-   PORTFOLIO DATA — Edit arrays below to update
-   content without touching HTML structure
-   ================================================ */
+const navigation = performance.getEntriesByType('navigation')[0];
+if (navigation?.type === 'reload') {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  window.addEventListener('pageshow', () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }), { once: true });
+}
 
-const TECH_STACK = [
-  { name: 'HTML',       icon: '🌐', level: 'Proficient'  },
-  { name: 'CSS',        icon: '🎨', level: 'Proficient'  },
-  { name: 'JavaScript', icon: '⚡', level: 'Learning'    },
-  { name: 'Python',     icon: '🐍', level: 'Learning'    },
-];
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const revealItems = document.querySelectorAll('.reveal');
 
-const PROJECTS = [
-  {
-    title: 'Multi Info Hub',
-    desc:  'A static web app that aggregates multiple information sources into a single clean interface.',
-    tags:  ['HTML', 'CSS', 'JavaScript'],
-    link:  'https://github.com/rofal-gg/multihub',
-  },
-  {
-    title: 'E-Learning Platform',
-    desc:  'A web-based e-learning platform built collaboratively, featuring course management and interactive learning modules.',
-    tags:  ['HTML', 'CSS', 'JavaScript', 'Node.js'],
-    link:  'https://github.com/rofal-gg/E-learning',
-  },
-  {
-    title: 'DexVoucher',
-    desc:  'A voucher management and redemption system — streamlining the creation, distribution, and tracking of digital vouchers.',
-    tags:  ['JavaScript', 'Web App'],
-    link:  'https://github.com/dhamm-dev/dexvoucher',
-  },
-  // Add more projects here ↓
-  // { title: '', desc: '', tags: [], link: '' },
-];
-
-const EDUCATION = [
-  {
-    year:   '2025 — Present',
-    title:  'S1 Teknik Informatika',
-    place:  'Universitas Trunojoyo Madura',
-    detail: 'Semester 2 · Focusing on data structures, algorithms, and web development fundamentals.',
-  },
-  {
-    year:   '2022 — 2025',
-    title:  'SMA / Sederajat',
-    place:  'Indonesia',
-    detail: 'High school graduate with interest in technology and programming.',
-  },
-  // Add more education here ↓
-];
-
-/* ================================================
-   TYPING EFFECT
-   ================================================ */
-function runTypingEffect() {
-  const el = document.getElementById('typed-text');
-  if (!el) return;
-
-  const phrases = [
-    'Frontend Developer.',
-    'Web Explorer.',
-    'UI Enthusiast.',
-  ];
-
-  let phraseIdx = 0;
-  let charIdx   = 0;
-  let deleting  = false;
-  const SPEED_TYPE   = 90;
-  const SPEED_DELETE = 50;
-  const PAUSE_END    = 1800;
-  const PAUSE_START  = 400;
-
-  function tick() {
-    const current = phrases[phraseIdx];
-    if (deleting) {
-      charIdx--;
-      el.textContent = current.slice(0, charIdx);
-      if (charIdx === 0) {
-        deleting   = false;
-        phraseIdx  = (phraseIdx + 1) % phrases.length;
-        setTimeout(tick, PAUSE_START);
-        return;
+const splitLetters = (element) => {
+  const letters = [];
+  element.setAttribute('aria-label', element.innerText.replace(/\s+/g, ' ').trim());
+  const walk = (node) => {
+    [...node.childNodes].forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const fragment = document.createDocumentFragment();
+        [...child.textContent].forEach((char) => {
+          if (char === ' ') {
+            fragment.append(' ');
+            return;
+          }
+          const span = document.createElement('span');
+          span.className = 'intro-letter';
+          span.textContent = char;
+          span.setAttribute('aria-hidden', 'true');
+          fragment.append(span);
+          letters.push(span);
+        });
+        child.replaceWith(fragment);
+      } else if (child.nodeName !== 'BR') {
+        walk(child);
       }
-      setTimeout(tick, SPEED_DELETE);
-    } else {
-      charIdx++;
-      el.textContent = current.slice(0, charIdx);
-      if (charIdx === current.length) {
-        deleting = true;
-        setTimeout(tick, PAUSE_END);
-        return;
-      }
-      setTimeout(tick, SPEED_TYPE);
+    });
+  };
+  walk(element);
+  element.classList.add('is-split');
+  return letters;
+};
+
+const welcomeIntro = document.querySelector('.welcome-intro');
+const welcomeKey = 'dhamm-portfolio-welcome';
+let welcomeSeen = false;
+try {
+  welcomeSeen = sessionStorage.getItem(welcomeKey) === 'seen';
+} catch {}
+if (new URLSearchParams(location.search).has('intro')) welcomeSeen = false;
+
+if (welcomeIntro && !welcomeSeen && welcomeIntro.showModal) {
+  let leaving = false;
+  let exitAnimations = [];
+  let letterAnimations = [];
+  let resetFrame;
+  let dragging = false;
+  const finishIntro = () => {
+    cancelAnimationFrame(resetFrame);
+    welcomeIntro.close();
+    document.documentElement.classList.remove('intro-active');
+    exitAnimations.forEach((animation) => animation.cancel());
+    letterAnimations.forEach((animation) => animation.cancel());
+    try {
+      sessionStorage.setItem(welcomeKey, 'seen');
+    } catch {}
+  };
+  const dismissIntro = () => {
+    if (leaving || !welcomeIntro.open) return;
+    if (motionPreference.matches || !welcomeIntro.animate) {
+      finishIntro();
+      return;
     }
-  }
-  tick();
-}
-
-/* ================================================
-   HERO FADE-IN
-   ================================================ */
-function runHeroFade() {
-  const items = document.querySelectorAll('.fade-in');
-  items.forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    setTimeout(() => {
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    }, 150 * i);
-  });
-}
-
-/* ================================================
-   CITY NAVIGATION
-   ================================================ */
-function buildCities() {
-  const cards   = document.querySelectorAll('.city-card');
-  const panels  = document.querySelectorAll('.city-panel');
-
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      const target = card.dataset.city;
-
-      // Toggle active card
-      cards.forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-
-      // Toggle active panel
-      panels.forEach(p => {
-        p.classList.remove('active');
-        if (p.id === `panel-${target}`) p.classList.add('active');
-      });
-
-      // Scroll panel into view
-      document.getElementById(`panel-${target}`).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    leaving = true;
+    welcomeIntro.classList.add('is-leaving');
+    letterAnimations = [...welcomeIntro.querySelectorAll('.intro-letter')].map((letter, index) => {
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 30 + Math.random() * 90;
+      const rotation = (Math.random() - 0.5) * 120;
+      const scale = 0.7 + Math.random() * 0.5;
+      return letter.animate(
+        [
+          { transform: 'translate(0, 0) rotate(0) scale(1)', opacity: 1 },
+          { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) rotate(${rotation}deg) scale(${scale})`, opacity: 0 }
+        ],
+        {
+          duration: 500 + Math.random() * 200,
+          delay: index * 10 + Math.random() * 40,
+          easing: 'cubic-bezier(.2,.7,.3,1)',
+          fill: 'forwards'
+        }
+      );
     });
-  });
+    const contentFades = [...welcomeIntro.querySelectorAll('.welcome-signature, .welcome-caption, .welcome-entry')].map((element) =>
+      element.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        { duration: 400, easing: 'ease-out', fill: 'forwards' }
+      )
+    );
+    const backgroundFade = welcomeIntro.animate(
+      [{ backgroundColor: '#242326' }, { backgroundColor: 'transparent' }],
+      { duration: 800, delay: 350, easing: 'ease-in-out', fill: 'forwards' }
+    );
+    exitAnimations = [...contentFades, backgroundFade];
+    backgroundFade.onfinish = finishIntro;
+  };
 
-  // Open first city by default
-  if (cards.length) cards[0].click();
-}
-
-/* ================================================
-   RENDER PROJECTS
-   ================================================ */
-function renderProjects() {
-  const container = document.getElementById('projects-container');
-  if (!container) return;
-
-  container.innerHTML = PROJECTS.map(p => `
-    <div class="project-card">
-      <div class="project-card-title">${p.title}</div>
-      <div class="project-card-desc">${p.desc}</div>
-      <div class="project-card-footer">
-        <div class="project-tags">
-          ${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
-        </div>
-        ${p.link ? `
-        <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="project-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          View on GitHub
-        </a>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-/* ================================================
-   RENDER EDUCATION TIMELINE
-   ================================================ */
-function renderEducation() {
-  const container = document.getElementById('education-container');
-  if (!container) return;
-
-  container.innerHTML = `<div class="timeline">` +
-    EDUCATION.map(e => `
-      <div class="timeline-item">
-        <div class="timeline-year mono">${e.year}</div>
-        <div class="timeline-title">${e.title}</div>
-        <div class="timeline-sub">${e.place}</div>
-        <div class="timeline-sub" style="margin-top:0.3rem">${e.detail}</div>
-      </div>
-    `).join('') +
-  `</div>`;
-}
-
-/* ================================================
-   RENDER TECH STACK
-   ================================================ */
-function renderTechStack() {
-  const container = document.getElementById('techstack-container');
-  if (!container) return;
-
-  container.innerHTML = `<div class="tech-grid">` +
-    TECH_STACK.map(t => `
-      <div class="tech-badge">
-        <span class="tech-badge-icon">${t.icon}</span>
-        <div>
-          <div class="tech-badge-name">${t.name}</div>
-          <div class="tech-badge-level">${t.level}</div>
-        </div>
-      </div>
-    `).join('') +
-  `</div>`;
-}
-
-/* ================================================
-   GUESTBOOK (localStorage)
-   ================================================ */
-const STORAGE_KEY = 'portfolio_guestbook';
-
-function loadMessages() {
-  const list = document.getElementById('messages-list');
-  if (!list) return;
-
-  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-
-  if (stored.length === 0) {
-    list.innerHTML = `<div class="no-messages">// No messages yet. Be the first! 🚀</div>`;
-    return;
+  welcomeIntro.showModal();
+  document.documentElement.classList.add('intro-active');
+  const welcomeTitle = welcomeIntro.querySelector('#welcome-title');
+  const letters = welcomeTitle ? splitLetters(welcomeTitle).map((element, index, all) => {
+    const distance = 30 + Math.random() * 90;
+    const direction = index < 5 || (index >= 9 && index < 9 + (all.length - 9) / 2) ? -1 : 1;
+    return { element, x: direction * distance, y: (Math.random() - 0.5) * distance * 0.4,
+      rotation: (Math.random() - 0.5) * 120, start: index / all.length * 0.35 };
+  }) : [];
+  const welcomeSlider = welcomeIntro.querySelector('.welcome-slider');
+  const signature = welcomeIntro.querySelector('.welcome-signature');
+  const wordmark = document.querySelector('.site-header .wordmark');
+  let signatureOrigin;
+  const measureSignature = () => {
+    signature.style.transform = '';
+    signatureOrigin = signature.getBoundingClientRect();
+  };
+  const renderProgress = (value) => {
+    const progress = value / 100;
+    welcomeSlider.value = value;
+    welcomeSlider.style.setProperty('--progress', `${value}%`);
+    welcomeIntro.style.setProperty('--intro-opacity', motionPreference.matches ? 1 : 1 - progress * 0.35);
+    welcomeIntro.querySelector('.welcome-entry').style.opacity = motionPreference.matches ? 1 : 1 - progress * 0.65;
+    letters.forEach(({ element, x, y, rotation, start }) => {
+      const amount = motionPreference.matches ? 0 : Math.max(0, Math.min(1, (progress - start) / (1 - start)));
+      element.style.transform = `translate(${x * amount}px, ${y * amount}px) rotate(${rotation * amount}deg) scale(${1 - amount * 0.2})`;
+      element.style.opacity = 1 - amount;
+    });
+  };
+  const resetProgress = () => {
+    if (leaving || !welcomeIntro.open || Number(welcomeSlider.value) === 0) return;
+    cancelAnimationFrame(resetFrame);
+    const start = Number(welcomeSlider.value);
+    if (motionPreference.matches) {
+      renderProgress(0);
+      return;
+    }
+    const started = performance.now();
+    const reset = (now) => {
+      const elapsed = Math.min((now - started) / 350, 1);
+      renderProgress(start * (1 - elapsed) ** 3);
+      if (elapsed < 1) resetFrame = requestAnimationFrame(reset);
+    };
+    resetFrame = requestAnimationFrame(reset);
+  };
+  const completeIntro = () => {
+    if (leaving || !welcomeIntro.open) return;
+    if (motionPreference.matches || !signature || !wordmark || !signature.animate) {
+      finishIntro();
+      return;
+    }
+    leaving = true;
+    welcomeIntro.classList.add('is-leaving');
+    welcomeSlider.disabled = true;
+    measureSignature();
+    const textRange = document.createRange();
+    textRange.selectNodeContents(signature);
+    const textWidth = textRange.getBoundingClientRect().width;
+    const scale = Math.max(1, Math.min(8, window.innerWidth * 0.85 / (textWidth || 1)));
+    const centerX = window.innerWidth / 2 - (signatureOrigin.left + signatureOrigin.width / 2);
+    const centerY = window.innerHeight / 2 - (signatureOrigin.top + signatureOrigin.height / 2);
+    const grow = signature.animate(
+      [{ transform: 'translate(0, 0) scale(1)' }, { transform: `translate(${centerX}px, ${centerY}px) scale(${scale})` }],
+      { duration: 1500, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }
+    );
+    const fadeContent = welcomeIntro.querySelector('.welcome-entry').animate(
+      [{ opacity: 0.35 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }
+    );
+    const fadeCaption = welcomeIntro.querySelector('.welcome-caption').animate(
+      [{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }
+    );
+    exitAnimations = [grow, fadeContent, fadeCaption];
+    grow.onfinish = () => {
+      const target = wordmark.getBoundingClientRect();
+      const x = target.left + target.width / 2 - signatureOrigin.left - signatureOrigin.width / 2;
+      const y = target.top + target.height / 2 - signatureOrigin.top - signatureOrigin.height / 2;
+      const targetScale = parseFloat(getComputedStyle(wordmark).fontSize) / parseFloat(getComputedStyle(signature).fontSize);
+      const move = signature.animate(
+        [{ transform: `translate(${centerX}px, ${centerY}px) scale(${scale})`, opacity: 1 },
+          { transform: `translate(${x}px, ${y}px) scale(${targetScale})`, opacity: 0 }],
+        { duration: 1000, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }
+      );
+      const background = welcomeIntro.animate(
+        [{ backgroundColor: 'rgba(36,35,38,.65)' }, { backgroundColor: 'rgba(36,35,38,0)' }],
+        { duration: 1000, easing: 'ease-in-out', fill: 'forwards' }
+      );
+      exitAnimations.push(move, background);
+      background.onfinish = finishIntro;
+    };
+  };
+  if (signature && wordmark) {
+    signature.style.animation = 'none';
+    measureSignature();
+    window.addEventListener('resize', () => {
+      if (!welcomeIntro.open || leaving) return;
+      measureSignature();
+      renderProgress(Number(welcomeSlider.value));
+    });
   }
-
-  list.innerHTML = stored.slice().reverse().map(m => `
-    <div class="message-item">
-      <div class="message-author">// ${escapeHtml(m.name)}</div>
-      <div class="message-text">${escapeHtml(m.message)}</div>
-      <div class="message-time">${m.time}</div>
-    </div>
-  `).join('');
-}
-
-function saveMessage(name, message) {
-  const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  stored.push({
-    name,
-    message,
-    time: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
+  renderProgress(0);
+  window.addEventListener('pageshow', () => {
+    if (welcomeIntro.open && !leaving) {
+      cancelAnimationFrame(resetFrame);
+      renderProgress(0);
+    }
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-}
-
-function setupGuestbook() {
-  const form    = document.getElementById('guestbook-form');
-  const nameEl  = document.getElementById('gb-name');
-  const msgEl   = document.getElementById('gb-message');
-  const btn     = document.getElementById('gb-submit');
-
-  if (!form) return;
-  loadMessages();
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name    = nameEl.value.trim();
-    const message = msgEl.value.trim();
-    if (!name || !message) return;
-
-    saveMessage(name, message);
-    nameEl.value  = '';
-    msgEl.value   = '';
-    loadMessages();
-
-    // Button feedback
-    btn.textContent = '✓ Sent!';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.disabled = false;
-    }, 2000);
+  welcomeSlider.addEventListener('pointerdown', (event) => {
+    dragging = true;
+    cancelAnimationFrame(resetFrame);
+    welcomeSlider.setPointerCapture(event.pointerId);
+  });
+  welcomeSlider.addEventListener('pointerup', () => {
+    dragging = false;
+    if (Number(welcomeSlider.value) === 100) completeIntro();
+    else resetProgress();
+  });
+  welcomeSlider.addEventListener('pointercancel', () => {
+    dragging = false;
+    resetProgress();
+  });
+  welcomeSlider.addEventListener('input', () => {
+    const value = Number(welcomeSlider.value);
+    renderProgress(value);
+    if (value === 100 && !dragging) completeIntro();
+  });
+  welcomeIntro.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    dismissIntro();
+  });
+  motionPreference.addEventListener('change', () => {
+    if (motionPreference.matches && leaving && welcomeIntro.open) finishIntro();
+    else if (welcomeIntro.open) renderProgress(Number(welcomeSlider.value));
   });
 }
 
-/* ================================================
-   ACTIVE NAV LINK ON SCROLL
-   ================================================ */
-function setupScrollSpy() {
-  const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('.navbar-links a');
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+if ('IntersectionObserver' in window && !motionPreference.matches) {
+  document.documentElement.classList.add('js-motion');
+  const observer = new IntersectionObserver((entries, currentObserver) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const link = document.querySelector(`.navbar-links a[href="#${entry.target.id}"]`);
-        if (link) link.classList.add('active');
+        entry.target.classList.add('is-visible');
+        currentObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 
-  sections.forEach(s => observer.observe(s));
+  revealItems.forEach((item) => observer.observe(item));
+  motionPreference.addEventListener('change', (event) => {
+    if (event.matches) {
+      document.documentElement.classList.remove('js-motion');
+      observer.disconnect();
+    }
+  });
 }
 
-/* ================================================
-   UTILS
-   ================================================ */
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+const filterBar = document.querySelector('.project-filters');
+const filterStatus = document.querySelector('.filter-status');
+const projectCards = [...document.querySelectorAll('.projects > .project')];
+const projectCategories = {
+  'LoopLink': ['web', 'collaboration'],
+  'Dhexx Panel': ['tools'],
+  'LAMPP Manager': ['tools'],
+  'WA Dashboard': ['web'],
+  'Palmustaka Publisher': ['web'],
+  'EduKita': ['web', 'collaboration'],
+  'DexVoucher': ['web'],
+};
+
+if (filterBar && filterStatus) {
+  filterBar.hidden = false;
+  filterStatus.hidden = false;
+  filterStatus.textContent = `${projectCards.length} projects`;
+  filterBar.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-filter]');
+    if (!button || button.getAttribute('aria-pressed') === 'true') return;
+    filterBar.querySelectorAll('button').forEach((item) => {
+      item.setAttribute('aria-pressed', String(item === button));
+    });
+    let visible = 0;
+    projectCards.forEach((card) => {
+      const categories = projectCategories[card.querySelector('h3').textContent] || [];
+      card.hidden = button.dataset.filter !== 'all' && !categories.includes(button.dataset.filter);
+      card.classList.remove('filtered-even');
+      if (card.hidden) return;
+      visible++;
+      card.classList.toggle('filtered-even', visible % 2 === 0);
+      card.classList.add('is-visible');
+      if (!motionPreference.matches && card.animate) {
+        card.getAnimations().forEach((animation) => animation.cancel());
+        card.animate(
+          [{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 360, delay: Math.min(visible - 1, 3) * 45, fill: 'backwards', easing: 'ease-out' }
+        );
+      }
+    });
+    document.querySelector('.projects').classList.add('is-filtered');
+    filterStatus.textContent = `${visible} ${visible === 1 ? 'project' : 'projects'} · ${button.textContent}`;
+  });
 }
 
-/* ================================================
-   INIT
-   ================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  runHeroFade();
-  runTypingEffect();
-  renderProjects();
-  renderEducation();
-  renderTechStack();
-  buildCities();
-  setupGuestbook();
-  setupScrollSpy();
+document.querySelectorAll('.project-art').forEach((cover) => {
+  let frame;
+  const reset = () => {
+    cancelAnimationFrame(frame);
+    cover.style.removeProperty('--tilt-x');
+    cover.style.removeProperty('--tilt-y');
+    cover.classList.remove('is-tilting');
+  };
+
+  cover.addEventListener('pointermove', (event) => {
+    if (motionPreference.matches || !finePointer.matches) return;
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      const bounds = cover.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      cover.style.setProperty('--tilt-x', `${-y * 5}deg`);
+      cover.style.setProperty('--tilt-y', `${x * 5}deg`);
+      cover.classList.add('is-tilting');
+    });
+  });
+  cover.addEventListener('pointerleave', reset);
+  cover.addEventListener('pointercancel', reset);
+  motionPreference.addEventListener('change', reset);
+  finePointer.addEventListener('change', reset);
+});
+
+document.querySelectorAll('.project-details').forEach((details) => {
+  const summary = details.querySelector('summary');
+  let animation;
+  let expanded = details.open;
+
+  const settle = () => {
+    animation?.cancel();
+    animation = null;
+    details.open = expanded;
+    details.style.removeProperty('overflow');
+  };
+
+  summary.addEventListener('click', (event) => {
+    if (motionPreference.matches || !details.animate) return;
+    event.preventDefault();
+    const start = details.getBoundingClientRect().height;
+    expanded = animation ? !expanded : !details.open;
+    animation?.cancel();
+    details.open = true;
+    const end = expanded
+      ? details.getBoundingClientRect().height
+      : summary.getBoundingClientRect().height + 1;
+    details.style.overflow = 'hidden';
+    animation = details.animate(
+      { height: [`${start}px`, `${end}px`] },
+      { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' }
+    );
+    animation.onfinish = settle;
+  });
+
+  motionPreference.addEventListener('change', () => {
+    if (animation) settle();
+  });
 });
